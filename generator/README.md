@@ -9,7 +9,13 @@ pip install -r requirements.txt
 **run**
 
 ```
+# python
+cd project
 python manage.py runserver
+
+# uwsgi
+cd project
+uwsgi --ini uwsgi.ini 
 ```
 
 
