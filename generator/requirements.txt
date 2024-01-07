@@ -1,3 +1,12 @@
-requests
-numpy
-psutil
+asgiref==3.7.2
+certifi==2023.11.17
+charset-normalizer==3.3.2
+Django==5.0.1
+idna==3.6
+numpy==1.26.3
+pip==23.0.1
+psutil==5.9.7
+requests==2.31.0
+setuptools==66.1.1
+sqlparse==0.4.4
+urllib3==2.1.0

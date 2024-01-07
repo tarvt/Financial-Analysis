@@ -1,12 +1,22 @@
-python3 -m venv venv
+# Run
+
+**build**
+```
 source venv/bin/activate
-python3 -m pip install Django
-cd app/
-python manage.py startapp generator
-deactivate
+pip install -r requirements.txt
+```
+
+**run**
+
+```
+python manage.py runserver
+```
 
 
+**django admin panel**
 
+```
 user: hatam
 email: hatamabolghasemi97@yahoo.com
 pass: Anathema
+```
