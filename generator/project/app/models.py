@@ -1,11 +1,15 @@
-import time
-import random
+from django.db import models
+
+# Create your models here.
+
+from django.utils import timezone
 import requests
 import json
 import psutil
 import os
+import random
 import numpy as np
-import threading
+import time
 
 # Set process affinity to a single core
 p = psutil.Process(os.getpid())
@@ -93,13 +97,11 @@ def generate_additional_data():
 
 def send_data(data):
     try:
-        response = requests.post(api_endpoint, data=json.dumps(
-            data), headers={"Content-Type": "application/json"})
+        response = requests.post(api_endpoint, data=json.dumps(data), headers={"Content-Type": "application/json"})
         if response.status_code != 200:
             print(f"Failed to send data: {data}. Response: {response.text}")
     except Exception as e:
         print(f"Error occurred: {e}")
-
 
 def send_additional_data():
     while True:
@@ -107,10 +109,3 @@ def send_additional_data():
         send_data(data)
         time.sleep(random.uniform(1, 5))
 
-
-if __name__ == "__main__":
-    threading.Thread(target=send_additional_data, daemon=True).start()
-    while True:
-        data = generate_data()
-        send_data(data)
-        time.sleep(random.uniform(1, 5))
