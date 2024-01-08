@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: generator-app-deployment
+spec:
+ replicas: 3 # Set the desired number of replicas (pods) for your application
+ selector:
+  matchLabels:
+   app: generator-app
+ template:
+  metadata:
+   labels:
+    app: generator-app
+  spec:
+   containers:
+   - name: generator-app
+     image: localhost:5001/generator-app # Replace with your actual Docker image name
+     ports:
+     - containerPort: 5000
