@@ -50,7 +50,6 @@ def generate_data():
         "volume": volume,
         "timestamp": time.time()
     }
-    logging.info(f"Generated data: {data}")
     return data
 
 
@@ -93,7 +92,7 @@ def generate_additional_data():
             "indicator_name": "GDP Growth Rate",
             "value": random.uniform(-5, 5)
         }
-    logging.info(f"Generated additional data: {data}")
+    logging.info(f"Generated Data: {data}")
     return data
 
 
