@@ -1,7 +1,6 @@
 import logging
 import requests
 import time
-import datetime
 from flask import Flask, request, jsonify
 from threading import Thread
 
@@ -41,6 +40,7 @@ def validate_data(data):
             return False
     return True
 
+
 def continuous_reader():
     while True:
         try:
@@ -58,6 +58,7 @@ def continuous_reader():
             logging.error(f"Error: {str(e)}")
         time.sleep(1)  
 
+
 @app.route('/')
 def get_validated_data():
     global latest_validated_data
@@ -70,3 +71,4 @@ if __name__ == '__main__':
         app.run(host='0.0.0.0', port=5002)
     except Exception as e:
         logging.critical(f"Fatal error: {e}")
+
