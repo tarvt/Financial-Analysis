@@ -75,7 +75,7 @@ kubectl apply -f kubernetes/
 curl 172.18.0.0:5000
 
 # delete all manifests
-kubectl delete -f kubernets/
+kubectl delete -f kubernetes/
 ```
 
 
