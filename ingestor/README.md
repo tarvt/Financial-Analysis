@@ -10,7 +10,6 @@ pip install -r requirements.txt
 
 ```
 # python
-cd project
 python app.py
 ```
 
@@ -18,10 +17,10 @@ python app.py
 
 ```
 # build and push to kind registry
-sudo docker build -t generator-app . && sudo docker tag generator-app localhost:5001/generator-app && sudo docker push localhost:5001/generator-app
+sudo docker build -t ingestor-app . && sudo docker tag ingestor-app localhost:5001/ingestor-app && sudo docker push localhost:5001/ingestor-app
 
 # run
-sudo docker run -p 5000:5000 localhost:5001/generator-app:latest
+sudo docker run -p 5002:5002 localhost:5001/ingestor-app:latest
 ```
 
 **helm**
@@ -43,15 +42,15 @@ helm install metallb metallb/metallb
 
 ```
 # test deployment
-kubectl create deployment generator-app-server --image=localhost:5001/generator-app:latest
-kubectl port-forward <pod_name> 5000:5000
+kubectl create deployment generator-app-server --image=localhost:5001/ingestor-app:latest
+kubectl port-forward <pod_name> 5002:5002
 
 # verify
 kubectl get pods
 
 # stop and remove deployment
 kubectl delete pod <pod_name>
-kubectl delete deployment generator-app-server
+kubectl delete deployment ingestor-app-server
 
 # run all manifests
 # BEWARE: YOU MUST HAVE INSTALLED HELM AND SETUP METALLB FIRST!
@@ -59,7 +58,7 @@ kubectl apply -f kubernetes/
 # wait until metallb speakers change their states into runngin
 
 # verify
-curl 172.18.0.0:5000
+curl 172.18.0.0:5002
 
 # delete all manifests
 kubectl delete -f kubernetes/
