@@ -61,22 +61,30 @@ def validate_data(data):
     # If all checks pass, return True to indicate valid data 
     return True
  
-def process_data(rdd): 
-    global latest_validated_data 
-    try: 
-        # Extract the data from the RDD 
+def process_data(rdd):  
+    global latest_validated_data  
+    try:  
+        # Extract the data from the RDD  
         data = rdd.collect() 
+        print(data)  
         for item in data: 
-            item_json = json.loads(item) 
-            received_logger.info(f"Received data: {item_json}") 
-            if validate_data(item_json): 
-                validated_logger.info(f"Validated data: {item_json}") 
-                latest_validated_data = item_json 
-            else: 
-                logging.error(f"Corrupted data: {item_json}") 
-    except Exception as e: 
-        logging.error(f"Error processing data: {str(e)}")
+            # Convert the string representation of a dictionary to an actual dictionary 
+            try: 
+                item_dict = json.loads(item.replace("'", "\"")) 
+            except json.JSONDecodeError: 
+                # If json.loads fails, use eval as a fallback 
+                # Be cautious with eval, it's a potential security risk 
+                item_dict = eval(item) 
  
+            received_logger.info(f"Received data: {item_dict}")  
+            if validate_data(item_dict):  
+                validated_logger.info(f"Validated data: {item_dict}")  
+                latest_validated_data = item_dict  
+            else:  
+                logging.error(f"Corrupted data: {item_dict}")  
+    except Exception as e:  
+        logging.error(f"Error processing data: {str(e)}")
+        
 # Process the data stream 
 data_stream.foreachRDD(process_data) 
 @app.route('/') 
