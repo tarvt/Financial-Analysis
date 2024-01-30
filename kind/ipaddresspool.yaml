@@ -1,0 +1,7 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: generator-app-address-pool
+spec:
+  addresses:
+  - 172.18.0.0-172.18.0.10
