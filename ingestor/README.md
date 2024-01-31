@@ -1,16 +1,11 @@
 # Run
 
-**build**
+**python**
+
 ```
+python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-```
-
-**run**
-
-```
-# python
-python app.py
 ```
 
 **docker**
@@ -23,26 +18,11 @@ sudo docker build -t ingestor-app . && sudo docker tag ingestor-app localhost:50
 sudo docker run -p 5002:5002 localhost:5001/ingestor-app:latest
 ```
 
-**helm**
-
-```
-wget https://get.helm.sh/helm-v3.13.3-linux-arm64.tar.gz
-tar -zxvf  helm-v3.13.3-linux-amd64.tar.gz
-sudo mv linux-amd64/helm /usr/local/bin/helm
-```
-
-**metallb**
-
-```
-helm repo add metallb https://metallb.github.io/metallb
-helm install metallb metallb/metallb
-```
-
 **kubernetes**
 
 ```
 # test deployment
-kubectl create deployment generator-app-server --image=localhost:5001/ingestor-app:latest
+kubectl create deployment ingestor-app-server --image=localhost:5001/ingestor-app:latest
 kubectl port-forward <pod_name> 5002:5002
 
 # verify
@@ -55,7 +35,7 @@ kubectl delete deployment ingestor-app-server
 # run all manifests
 # BEWARE: YOU MUST HAVE INSTALLED HELM AND SETUP METALLB FIRST!
 kubectl apply -f kubernetes/
-# wait until metallb speakers change their states into runngin
+# wait until metallb speakers change their states into running
 
 # verify
 curl 172.18.0.0:5002
@@ -64,5 +44,3 @@ curl 172.18.0.0:5002
 kubectl delete -f kubernetes/
 ```
 
-
-Don't forget that you've hardcoded loadbalancer's ip into setting.py as allowed host. find a better solution later. it's not clean.

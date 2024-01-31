@@ -24,7 +24,7 @@ sc = SparkContext("local[2]", "DataIngestor")
 ssc = StreamingContext(sc, 1) 
  
 # Create a DStream that listens to a socket on port 5000 for incoming data 
-data_stream = ssc.socketTextStream("localhost", 5000) 
+data_stream = ssc.socketTextStream("172.18.0.0", 5000) 
  # Initialize latest_validated_data with a default value 
 latest_validated_data = {"message": "No validated data available"}
 def validate_data(data): 
