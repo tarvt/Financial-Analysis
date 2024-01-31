@@ -1,24 +1,21 @@
-import psutil
-import os
-import random
-import numpy as np
-import time
-import logging
-from flask import Flask
-from threading import Thread
-from flask import jsonify
-
-p = psutil.Process(os.getpid())
-p.cpu_affinity([0])
-stocks = ["AAPL", "GOOGL", "AMZN", "MSFT", "TSLA"]
-logging.basicConfig(filename='generator.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-app = Flask(__name__)
+import socket 
+import logging 
+import time 
+import random 
+import numpy as np 
+from threading import Thread 
+ 
+# Configuration for the socket server 
+TCP_IP = '0.0.0.0' 
+TCP_PORT = 5000 
+BUFFER_SIZE = 1024 
 
 
-@app.route("/")
-def get_data():
-    data = generate_additional_data()
-    return jsonify(data)
+
+# Initialize the logger 
+logging.basicConfig(filename='generator.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s') 
+ 
+stocks = ["AAPL", "GOOGL", "AMZN", "MSFT", "TSLA"] 
 
 
 def generate_data():
@@ -96,17 +93,32 @@ def generate_additional_data():
     return data
 
 
-def generate_and_send_data():
-    while True:
-        data = generate_additional_data()
-        time.sleep(random.uniform(1, 5)) 
-
-
-if __name__ == "__main__":
-    try:
-        thread = Thread(target=generate_and_send_data)
-        thread.start()
-        app.run(host='0.0.0.0', port=5000)
-    except Exception as e:
+def generate_and_send_data(conn): 
+    try: 
+        while True: 
+            data = generate_additional_data() 
+            message = f"{data}\n" 
+            conn.send(message.encode()) 
+            time.sleep(random.uniform(1, 5)) 
+    except Exception as e: 
+        logging.critical(f"Error sending data: {e}") 
+ 
+def socket_server(): 
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+    s.bind((TCP_IP, TCP_PORT)) 
+    s.listen(1) 
+     
+    logging.info(f"Listening on port {TCP_PORT}...") 
+ 
+    conn, addr = s.accept() 
+    logging.info(f"Connection address: {addr}") 
+ 
+    generate_and_send_data(conn) 
+    conn.close() 
+ 
+if __name__ == "__main__": 
+    try: 
+        server_thread = Thread(target=socket_server) 
+        server_thread.start() 
+    except Exception as e: 
         logging.critical(f"Fatal error: {e}")
-
