@@ -25,7 +25,7 @@ python app.py
 
 ```
 # build and push to kind registry
-sudo docker build -t processor-app . && sudo docker tag processor-app localhost:5001/processor-app && sudo docker push localhost:5001/processor-app
+sudo docker build -t processor . && sudo docker tag processor localhost:5001/processor && sudo docker push localhost:5001/processor
 
 # run
 sudo docker run -p 5002:5002 localhost:5001/processor-app:latest

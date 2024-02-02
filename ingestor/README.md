@@ -37,10 +37,7 @@ python app.py
 
 ```
 # build and push to kind registry
-sudo docker build -t ingestor-app . && sudo docker tag ingestor-app localhost:5001/ingestor-app && sudo docker push localhost:5001/ingestor-app
-
-# run
-sudo docker run -p 5002:5002 localhost:5001/ingestor-app:latest
+sudo docker build -t localhost:5001/ingestor . && sudo docker push localhost:5001/ingestor
 ```
 
 **kubernetes**
@@ -50,7 +47,7 @@ sudo docker run -p 5002:5002 localhost:5001/ingestor-app:latest
 kubectl apply -f kubernetes.yaml
 
 # test
-kubectl create deployment ingestor-app --image=localhost:5001/ingestor-app:latest
+kubectl create deployment ingestor --image=localhost:5001/ingestor
 kubectl port-forward <pod_name> 5000:5000
 
 # verify
@@ -61,6 +58,5 @@ curl 172.18.0.x:5002
 
 # stop 
 kubectl delete -f kubernetes.yaml
-kubectl delete deployment ingestor-app
-
+kubectl delete deployment ingestor
 ```

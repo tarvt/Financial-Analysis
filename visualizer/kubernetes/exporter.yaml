@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: exporter
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: exporter
+ template:
+  metadata:
+   labels:
+    app: exporter
+  spec:
+   containers:
+   - name: exporter
+     image: localhost:5001/exporter
+     env:
+       - name: POLLING_INTERVAL_SECONDS
+         value: "5"
+       - name: APP_PORT
+         value: "5005"
+       - name: EXPORTER_PORT
+         value: "9877"
+     ports:
+     - containerPort: 9877
+       name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exporter
+  labels:
+    app: exporter
+spec:
+  type: LoadBalancer
+  selector:
+    app: exporter
+  ports:
+    - port: 9877
+      protocol: TCP
+      targetPort: 9877

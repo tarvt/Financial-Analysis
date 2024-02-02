@@ -1,35 +1,40 @@
-# Run
+**python**
+```
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python app.py
 
-**prometheus**
+# Don't forget to `deactivate` when your work is done.
+```
+
+**docker**
 
 ```
-# docker
-docker pull prom/prometheus
-docker tag prom/prometheus localhost:5001/prometheus && sudo docker push localhost:5001/prometheus
+# build and push to kind registry
+sudo docker build -t localhost:5001/exporter . && sudo docker push localhost:5001/exporter
 
-# kubernetes
-kubectl apply -f prometheus
-kubectl port-forward <pod_name> 9090:9090 --namespace=prometheus
+# run
+sudo docker run -p 9877:9877 localhost:5001/exporter
+```
+
+**kubernetes**
+
+```
+# run
+kubectl apply -f kubernetes.yaml
+
+# test
+kubectl create deployment exporter --image=localhost:5001/exporter
+kubectl port-forward <pod_name> 9877:9877
 
 # verify
 kubectl get pods
-curl 127.0.0.1:9090
+curl 127.0.0.1:9877
+kubectl get svc
+curl 172.18.0.x:9877
 
-# stop and remove
-kubectl delete -f prometheus
+# stop 
+kubectl delete -f kubernetes.yaml
+kubectl delete deployment exporter
 ```
-
-**grafana**
-
-```
-# docker
-docker pull grafana/grafana
-docker tag grafana/grafana localhost:5001/grafana && sudo docker push localhost:5001/grafana
-
-# kuberentes
-kubectl apply -f grafana
-kubectl port-forward <pod_name> 3000:3000
-```
-
-Get prometheus ip using `kubectl get svc` and use it for adding datasource in grafana.
-Grafana's default authentication is admin:admin. It asks for new password. Set it to 123456.

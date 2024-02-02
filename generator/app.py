@@ -6,7 +6,8 @@ import numpy as np
 from threading import Thread 
  
 # Configuration for the socket server 
-TCP_IP = '127.0.0.1' 
+# TCP_IP = '127.0.0.1' 
+TCP_IP = '0.0.0.0' 
 TCP_PORT = 5000 
 BUFFER_SIZE = 1024 
 

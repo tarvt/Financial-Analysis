@@ -1,37 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: ingestor-app-deployment
+ name: ingestor
 spec:
  replicas: 1
  selector:
   matchLabels:
-   app: ingestor-app
+   app: ingestor
  template:
   metadata:
    labels:
-    app: ingestor-app
+    app: ingestor
   spec:
    containers:
-   - name: ingestor-app
-     image: localhost:5001/ingestor-app
-     ports:
-     - containerPort: 5002
+   - name: ingestor
+     image: localhost:5001/ingestor
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ingestor-app-service
+  name: redis-service
   labels:
-    app: ingestor-app
+    app: redis
 spec:
   type: LoadBalancer
   selector:
-    app: ingestor-app
+    app: redis
   ports:
-    - port: 5002
+    - port: 6379
       protocol: TCP
-      targetPort: 5002
+      targetPort: 6379
 ---
 apiVersion: apps/v1
 kind: Deployment

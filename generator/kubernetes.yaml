@@ -1,33 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: generator-app-deployment
+ name: generator
 spec:
  replicas: 1 
  selector:
   matchLabels:
-   app: generator-app
+   app: generator
  template:
   metadata:
    labels:
-    app: generator-app
+    app: generator
   spec:
    containers:
-   - name: generator-app
-     image: localhost:5001/generator-app
+   - name: generator
+     image: localhost:5001/generator
      ports:
      - containerPort: 5000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: generator-app-service
+  name: generator-service
   labels:
-    app: generator-app
+    app: generator
 spec:
   type: LoadBalancer
   selector:
-    app: generator-app
+    app: generator
   ports:
     - port: 5000
       protocol: TCP

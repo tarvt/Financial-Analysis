@@ -14,10 +14,10 @@ python app.py
 
 ```
 # build and push to kind registry
-sudo docker build -t generator-app . && sudo docker tag generator-app localhost:5001/generator-app && sudo docker push localhost:5001/generator-app
+sudo docker build -t localhost:5001/generator . && sudo docker push localhost:5001/generator
 
 # run
-sudo docker run -p 5000:5000 localhost:5001/generator-app:latest
+sudo docker run -p 5000:5000 localhost:5001/generator
 ```
 
 **kubernetes**
@@ -27,7 +27,7 @@ sudo docker run -p 5000:5000 localhost:5001/generator-app:latest
 kubectl apply -f kubernetes.yaml
 
 # test
-kubectl create deployment generator-app-server --image=localhost:5001/generator-app:latest
+kubectl create deployment generator --image=localhost:5001/generator
 kubectl port-forward <pod_name> 5000:5000
 
 # verify
@@ -38,7 +38,6 @@ curl 172.18.0.x:5000
 
 # stop 
 kubectl delete -f kubernetes.yaml
-kubectl delete deployment generator-app-server
-
+kubectl delete deployment generator
 ```
 

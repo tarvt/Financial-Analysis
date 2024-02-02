@@ -4,6 +4,7 @@ import threading
 import time 
 import requests 
 import redis 
+from flask import Flask, jsonify
 from pyspark.sql import SparkSession 
 from pyspark.streaming import StreamingContext 
  
@@ -13,7 +14,8 @@ sc = spark.sparkContext
 ssc = StreamingContext(sc, 1) 
  
 # Initialize Redis client 
-redis_client = redis.StrictRedis(host='localhost', port=6379, db=0) 
+# redis_client = redis.StrictRedis(host='localhost', port=6379, db=0) 
+redis_client = redis.StrictRedis(host='172.18.0.1', port=6379, db=0) 
  
 # DataFrame to store the processed data 
 processed_data_df = pd.DataFrame() 
@@ -98,7 +100,11 @@ def stream_processed_data():
 
                 # Send data to port 5004 
                 try: 
-                    print(f"processed_data : {processed_data}")
+                    print(f"{processed_data}")
+                    app.logger.info(f"{processed_data}")  # Log for debugging
+                    #response = requests.post('http://127.0.0.1:5005/', json=json.dumps(processed_data))
+                    response = requests.post('http://0.0.0.0:5005/', json=json.dumps(processed_data))
+
                     #response = requests.post('http://127.0.0.1:5004/', json=json.dumps(processed_data)) 
                     #print(f"Data sent to port 5004: {processed_data}, Response: {response.text}") 
                 except Exception as e: 
@@ -106,8 +112,21 @@ def stream_processed_data():
  
         time.sleep(1)
 
- 
-# Run the streaming function in a separate thread 
-threading.Thread(target=stream_processed_data).start() 
- 
-ssc.awaitTermination()
+
+app = Flask(__name__)
+
+
+@app.route("/")
+def get_data():
+    data = stream_processed_data()
+    return jsonify(data)
+
+
+if __name__ == "__main__":
+    try:
+        threading.Thread(target=stream_processed_data).start()
+        app.run(host='0.0.0.0', port=5005)
+        ssc.awaitTermination() 
+    except Exception as e:
+        print(f"Fatal error: {e}")
+
