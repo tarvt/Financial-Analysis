@@ -35,7 +35,8 @@ class AppMetrics:
     """
 
     # Fetch raw status data from the application
-    resp = requests.get(url=f"http://localhost:{self.app_port}/")
+    # resp = requests.get(url=f"http://localhost:{self.app_port}/")
+    resp = requests.get(url=f"http://172.18.0.4:{self.app_port}/")
 
     # Update Prometheus metrics with application metrics
     self.data_type.set(resp["data_type"])

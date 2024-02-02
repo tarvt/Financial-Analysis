@@ -25,7 +25,7 @@ ssc = StreamingContext(sc, 1)
  
 # Create a DStream that listens to a socket on port 5000 for incoming data 
 #data_stream = ssc.socketTextStream("localhost", 5000) 
-data_stream = ssc.socketTextStream("172.18.0.0", 5000) 
+data_stream = ssc.socketTextStream("172.18.0.3", 5000) 
  
 def send_data_to_socket(host, port, data): 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: 
@@ -69,7 +69,7 @@ def validate_data(data):
  
 # Initialize Redis client 
 # redis_client = redis.StrictRedis(host='localhost', port=6379, db=0) 
-redis_client = redis.StrictRedis(host='172.18.0.1', port=6379, db=0) 
+redis_client = redis.StrictRedis(host='172.18.0.2', port=6379, db=0) 
  
 def process_data(rdd):  
     try:  
