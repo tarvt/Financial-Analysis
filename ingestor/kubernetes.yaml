@@ -17,3 +17,18 @@ spec:
      image: localhost:5001/ingestor-app
      ports:
      - containerPort: 5002
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingestor-app-service
+  labels:
+    app: ingestor-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: ingestor-app
+  ports:
+    - port: 5002
+      protocol: TCP
+      targetPort: 5002

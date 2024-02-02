@@ -13,18 +13,21 @@ Before running the Ingestor and Processor, ensure that the Redis server is insta
  
 Install Redis: Follow the instructions on the official Redis website to install Redis on your system. 
 Start Redis Server: Run the Redis server. By default, Redis listens on port 6379. 
-**python**
+
+**redis**
 ```
 systemctl restart redis-server
 sudo systemctl status redis-server
 ```
 
 **python**
-
 ```
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+python app.py
+
+# Don't forget to `deactivate` when your work is done.
 ```
 
 **docker**
@@ -40,26 +43,21 @@ sudo docker run -p 5002:5002 localhost:5001/ingestor-app:latest
 **kubernetes**
 
 ```
-# test deployment
-kubectl create deployment ingestor-app-server --image=localhost:5001/ingestor-app:latest
-kubectl port-forward <pod_name> 5002:5002
+# run
+kubectl apply -f kubernetes.yaml
+
+# test
+kubectl create deployment ingestor-app --image=localhost:5001/ingestor-app:latest
+kubectl port-forward <pod_name> 5000:5000
 
 # verify
 kubectl get pods
+curl 127.0.0.1:5002
+kubectl get svc
+curl 172.18.0.x:5002
 
-# stop and remove deployment
-kubectl delete pod <pod_name>
-kubectl delete deployment ingestor-app-server
+# stop 
+kubectl delete -f kubernetes.yaml
+kubectl delete deployment ingestor-app
 
-# run all manifests
-# BEWARE: YOU MUST HAVE INSTALLED HELM AND SETUP METALLB FIRST!
-kubectl apply -f kubernetes/
-# wait until metallb speakers change their states into running
-
-# verify
-curl 172.18.0.0:5002
-
-# delete all manifests
-kubectl delete -f kubernetes/
 ```
-

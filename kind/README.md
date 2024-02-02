@@ -1,3 +1,7 @@
+kubectl version:
+Client Version: v1.28.4
+Server Version: v1.27.3
+
 **install**
 
 ```
@@ -26,6 +30,9 @@ wget https://get.helm.sh/helm-v3.13.3-linux-arm64.tar.gz
 tar -zxvf  helm-v3.13.3-linux-amd64.tar.gz
 sudo mv linux-amd64/helm /usr/local/bin/helm
 ```
+helm version
+Version:"v3.13.3"
+
 
 **metallb**
 
