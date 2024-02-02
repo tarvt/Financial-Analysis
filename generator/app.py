@@ -6,7 +6,7 @@ import numpy as np
 from threading import Thread 
  
 # Configuration for the socket server 
-TCP_IP = '0.0.0.0' 
+TCP_IP = '127.0.0.1' 
 TCP_PORT = 5000 
 BUFFER_SIZE = 1024 
 
@@ -100,6 +100,7 @@ def generate_and_send_data(conn):
             message = f"{data}\n" 
             conn.send(message.encode()) 
             time.sleep(random.uniform(1, 5)) 
+            print(f"data sent : {data}")
     except Exception as e: 
         logging.critical(f"Error sending data: {e}") 
  

@@ -3,7 +3,7 @@ import json
 import socket 
 from pyspark import SparkContext 
 from pyspark.streaming import StreamingContext 
-import redis
+ 
 # Set up logging 
 received_logger = logging.getLogger('received_data') 
 received_logger.setLevel(logging.INFO) 
@@ -66,20 +66,17 @@ def validate_data(data):
     # If all checks pass, return True to indicate valid data 
     return True
  
-# Initialize Redis client 
-redis_client = redis.StrictRedis(host='localhost', port=6379, db=0) 
  
-def process_data(rdd):  
-    try:  
-        data = rdd.collect()  
-        for item in data:  
-            item_dict = json.loads(item.replace("'", "\""))  
+def process_data(rdd): 
+    try: 
+        data = rdd.collect() 
+        for item in data: 
+            item_dict = json.loads(item.replace("'", "\"")) 
+            print(f"data reecived ::{item_dict}")
             if validate_data(item_dict): 
-                redis_client.rpush("processed_data", json.dumps(item_dict))  
-                print(f"Sent data to Redis: {item_dict}") 
-    except Exception as e:  
-        logging.error(f"Error processing data: {str(e)}")  
-
+                send_data_to_socket('localhost', 5002, json.dumps(item_dict)) 
+    except Exception as e: 
+        logging.error(f"Error processing data: {str(e)}") 
  
 # Process the data stream 
 data_stream.foreachRDD(process_data) 

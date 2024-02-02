@@ -1,4 +1,23 @@
+# Functionality 
+Listens for incoming financial data on a specified port. 
+Validates the incoming data based on predefined criteria. 
+Streams valid data to Redis for further processing. 
+# Usage 
+Start the Ingestor script. Ensure it's configured to listen on the correct port for incoming data and to connect to Redis on the default port (6379). 
+ 
+The Ingestor processes data and sends it to Redis under a specific key (e.g., processed_data).
+
 # Run
+## Setting up Redis 
+Before running the Ingestor and Processor, ensure that the Redis server is installed and running. Redis acts as a broker, allowing the Ingestor to stream data to it, and the Processor to consume this data. 
+ 
+Install Redis: Follow the instructions on the official Redis website to install Redis on your system. 
+Start Redis Server: Run the Redis server. By default, Redis listens on port 6379. 
+**python**
+```
+systemctl restart redis-server
+sudo systemctl status redis-server
+```
 
 **python**
 
