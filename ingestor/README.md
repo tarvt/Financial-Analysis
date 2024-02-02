@@ -18,6 +18,9 @@ Start Redis Server: Run the Redis server. By default, Redis listens on port 6379
 ```
 systemctl restart redis-server
 sudo systemctl status redis-server
+
+docker pull redis
+docker tag redis localhost:5001/redis && sudo docker push localhost:5001/redis
 ```
 
 **python**

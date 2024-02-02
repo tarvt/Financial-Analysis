@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
  name: ingestor-app-deployment
 spec:
- replicas: 3
+ replicas: 1
  selector:
   matchLabels:
    app: ingestor-app
@@ -32,3 +32,23 @@ spec:
     - port: 5002
       protocol: TCP
       targetPort: 5002
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: redis
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: redis
+ template:
+  metadata:
+   labels:
+    app: redis
+  spec:
+   containers:
+   - name: redis
+     image: localhost:5001/redis
+     ports:
+     - containerPort: 6379
