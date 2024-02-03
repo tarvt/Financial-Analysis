@@ -6,7 +6,7 @@ import requests
 import redis 
 from pyspark.sql import SparkSession 
 from pyspark.streaming import StreamingContext 
- 
+from flask import Flask, jsonify
 # Initialize Spark Session and Context 
 spark = SparkSession.builder.appName("TradingIndicatorProcessor").getOrCreate() 
 sc = spark.sparkContext 
@@ -28,22 +28,12 @@ def select_appropriate_field(data):
         return None
 
 def moving_average(series, periods=20): 
-    """ 
-    Calculate the Moving Average (MA) for the given data. 
-    :param series: Pandas Series with numerical data. 
-    :param periods: Number of periods over which to calculate the average. 
-    :return: Pandas Series containing the moving averages. 
-    """ 
+
     return series.rolling(window=periods).mean() 
  
 def exponential_moving_average(series, periods=20): 
-    """ 
-    Calculate the Exponential Moving Average (EMA) for the given data. 
-    :param series: Pandas Series with numerical data. 
-    :param periods: Number of periods over which to calculate the EMA. 
-    :return: Pandas Series containing the exponential moving averages. 
-    """ 
-    return series.ewm(span=periods, adjust=False).mean() 
+
+    return series.ewm(span=periods, adjust=False).mean()  #exponentially weighted
  
 def relative_strength_index(series, periods=14): 
     """ 
@@ -70,7 +60,7 @@ def stream_processed_data():
  
     while True: 
         # Fetch data from Redis 
-        _, data = redis_client.blpop("processed_data") 
+        _, data = redis_client.blpop("processed_data") #Redis BLPOP command is used to remove and get the first element in a list, or block until one is available.
         data_dict = json.loads(data.decode('utf-8')) 
  
         data_type = data_dict.get('data_type') 
@@ -95,12 +85,14 @@ def stream_processed_data():
                     'EMA': ema.iloc[-1] if not ema.empty else None, 
                     'RSI': rsi.iloc[-1] if not rsi.empty else None 
                 } 
-
-                # Send data to port 5004 
+                processed_data_clean = {k: (0 if pd.isna(v) else v) for k, v in processed_data.items()}
+                # Send data to port 5005
                 try: 
                     print(f"processed_data : {processed_data}")
-                    #response = requests.post('http://127.0.0.1:5004/', json=json.dumps(processed_data)) 
-                    #print(f"Data sent to port 5004: {processed_data}, Response: {response.text}") 
+                    #response = requests.post('http://0.0.0.0:5005/', json=json.dumps(processed_data))
+                    #response = requests.post('http://0.0.0.0:5005/signal',  json=json.dumps(processed_data)) 
+                    response = requests.post('http://0.0.0.0:5005/signal',  json=processed_data_clean) 
+                    print(f"Data sent to port 5005: {processed_data}, Response: {response.text}") 
                 except Exception as e: 
                     print(f"Error sending data: {e}") 
  
@@ -108,6 +100,8 @@ def stream_processed_data():
 
  
 # Run the streaming function in a separate thread 
-threading.Thread(target=stream_processed_data).start() 
+#threading.Thread(target=stream_processed_data).start() 
  
-ssc.awaitTermination()
+#ssc.awaitTermination()
+if __name__ == "__main__": 
+    threading.Thread(target=stream_processed_data).start()
