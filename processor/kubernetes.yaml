@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: processor
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: processor
+ template:
+  metadata:
+   labels:
+    app: processor
+  spec:
+   containers:
+   - name: processor
+     image: localhost:5001/processor
+     ports:
+     - containerPort: 9877
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: processor
+  labels:
+    app: processor
+spec:
+  type: LoadBalancer
+  selector:
+    app: processor
+  ports:
+    - port: 9877
+      protocol: TCP
+      targetPort: 9877
+
