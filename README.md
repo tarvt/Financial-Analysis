@@ -1,6 +1,8 @@
 # Financial-Analysis 
 3 - Distributed Systems Project 
- 
+
+Written by: Taravat Monsef, Hatam Abolghasemi
+
 ## Scenario 
  
 1. generator  

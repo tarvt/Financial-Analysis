@@ -1,6 +1,5 @@
 pyspark
 redis
 pandas
-requests
 flask
 prometheus_client
