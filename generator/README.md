@@ -1,4 +1,7 @@
-# Run
+Input:  self
+output: 5000
+
+# RUN
 
 **python**
 ```
@@ -29,15 +32,15 @@ kubectl apply -f kubernetes.yaml
 # test
 kubectl create deployment generator --image=localhost:5001/generator
 kubectl port-forward <pod_name> 5000:5000
+curl 127.0.0.1:5000
 
 # verify
-kubectl get pods
-curl 127.0.0.1:5000
-kubectl get svc
-curl 172.18.0.x:5000
+kubectl get pods | grep generator
+kubectl get svc | grep generator
 
 # stop 
 kubectl delete -f kubernetes.yaml
 kubectl delete deployment generator
+kubectl delete service generator
 ```
 

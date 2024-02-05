@@ -11,6 +11,9 @@ Upon receiving data, the Processor calculates the required financial indicators 
 ## Connecting Ingestor and Processor via Redis 
 The Ingestor and Processor are connected through Redis. The Ingestor pushes validated data into Redis, and the Processor, upon detecting new data in Redis, retrieves and processes it. This setup decouples the two components, allowing for more robust and scalable data processing.
 
+Input:  redis    6379 (service)
+output: exporter 9877 (exposed)
+
 **python**
 ```
 python -m venv venv

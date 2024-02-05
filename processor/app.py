@@ -8,7 +8,7 @@ from flask import Flask
 from prometheus_client import start_http_server, Gauge
 
 # Initialize Redis client
-redis_client = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
+redis_client = redis.StrictRedis(host='0.0.0.0', port=6379, db=0)
 
 # Create Prometheus metrics
 ma_metric = Gauge('market_data_ma', 'Moving Average')

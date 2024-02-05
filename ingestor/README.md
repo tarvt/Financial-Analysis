@@ -7,6 +7,9 @@ Start the Ingestor script. Ensure it's configured to listen on the correct port 
  
 The Ingestor processes data and sends it to Redis under a specific key (e.g., processed_data).
 
+Input:  generator 5000 (service)
+output: redis 6379 (service)
+
 # Run
 ## Setting up Redis 
 Before running the Ingestor and Processor, ensure that the Redis server is installed and running. Redis acts as a broker, allowing the Ingestor to stream data to it, and the Processor to consume this data. 
@@ -48,7 +51,7 @@ kubectl apply -f kubernetes.yaml
 
 # test
 kubectl create deployment ingestor --image=localhost:5001/ingestor
-kubectl port-forward <pod_name> 5000:5000
+kubectl port-forward <pod_name> 5002:5002
 
 # verify
 kubectl get pods

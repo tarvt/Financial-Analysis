@@ -60,17 +60,3 @@
  
     --- 
  
-## HELP 
- 
-helm 
- 
- 
-wget https://get.helm.sh/helm-v3.13.3-linux-arm64.tar.gz 
-tar -zxvf  helm-v3.13.3-linux-amd64.tar.gz 
-sudo mv linux-amd64/helm /usr/local/bin/helm  
- 
-metallb 
- 
- 
-helm repo add metallb https://metallb.github.io/metallb 
-helm install metallb metallb/metallb

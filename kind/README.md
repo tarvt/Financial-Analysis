@@ -26,17 +26,26 @@ kind delete cluster
 **helm**
 
 ```
+# way 1
 wget https://get.helm.sh/helm-v3.13.3-linux-arm64.tar.gz
 tar -zxvf  helm-v3.13.3-linux-amd64.tar.gz
 sudo mv linux-amd64/helm /usr/local/bin/helm
-```
-helm version
-Version:"v3.13.3"
 
+# way 2
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+apt-get install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+apt update
+apt install helm
+
+# verification
+helm version
+```
 
 **metallb**
 
 ```
+# install
 helm repo add metallb https://metallb.github.io/metallb
 helm install metallb metallb/metallb
 
@@ -46,6 +55,7 @@ docker network inspect -f '{{.IPAM.Config}}' kind
 # set docker network ip as the address pool
 kubectl apply -f ipaddresspool.yaml
 
-# verify everything is fine
+# verifification
 kubectl get services
 ```
+
