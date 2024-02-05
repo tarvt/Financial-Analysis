@@ -57,4 +57,4 @@ data:
           - targets: ['0.0.0.0:9090']
       - job_name: 'exporter'
         static_configs:
-          - targets: ['172.18.0.5:9877']            
+          - targets: ['192.168.1.102:9877']            

@@ -10,4 +10,4 @@ ENV JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 COPY app.py .
 
 CMD ["python", "app.py"]
-EXPOSE 5005
+EXPOSE 9877
