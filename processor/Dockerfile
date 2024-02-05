@@ -6,9 +6,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
+ENV JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 COPY app.py .
 
-ENV JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
-
 CMD ["python", "app.py"]
-EXPOSE 6379
+EXPOSE 9877

@@ -11,15 +11,11 @@ def generate_signal():
         data_type = data.get('data_type') 
         signal = "hold"  # Default signal 
  
-
-
         if data.get('MA') and data.get('EMA'): 
             if data['MA'] > data['EMA']: 
                 signal = "sell" 
             elif data['MA'] < data['EMA']: 
                 signal = "buy" 
- 
-        # Add more conditions for other data types as needed 
  
         print("*******************************") 
         print(f"Signal for {data_type}: {signal}") 
@@ -31,3 +27,4 @@ def generate_signal():
  
 if __name__ == "__main__": 
     app.run(host='0.0.0.0', port=5005)
+    
